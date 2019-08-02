@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>read JSON from URL</title>
+<style>
+        h1{
+    text-align: center;
+}
+h1:hover{
+    color:pink;
+    transition: .9s;
+}
+.imgborder {
+    border: 1px solid #000; 
+}
+.bg-lgrey {
+     background-color: #ddd;
+    }
+        
+        </style>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">  <!-- Script: Make my navbar transparent when the document is scrolled to top -->
+
+</head>
+
+<body >
+    <div class="row">
+            <div class="col-md-1 text-primary" >
+                    <h1>S.No.</h1>
+                 </div>
+                 <div class="col-md-2 text-primary" >
+                        <h1>Username</h1>
+                     </div>
+<div class="col-md-2 text-primary" >
+   <h1>Photo</h1>
+</div>
+<div class="col-md-4 text-primary">
+    <h1>Statistics</h1>
+</div>
+<div class="col-md-3 text-primary">
+    <h1>Interests</h1>
+</div>
+    </div>
+    <div id="datatable"></div>
+    <br>
+    <script>
+            var rowtemplate = '<div class="row %cname%">'+
+                    '<h5 class="col-md-1">%d_sno%.</h5>'+
+                    '<h5 class="col-md-2">%d_user%</h5>'+
+                    '<img src="%d_img%" class="col-md-2 imgborder" alt="icon" />'+
+                    '<h6 class="col-md-4">%d_stats%</h5>'+
+                    '<h6 class="col-md-3">%d_interest%</h5>'+
+           ' </div>';
+        
+    </script>
+  
+   <script>    
+   $.getJSON('http://demo4469839.mockable.io/influencers', function(data) {
+       var dataLength = data.data.allInfluencers.length;
+        $('#datatable').append('<span>Total '+dataLength+' records found</span><br/>');
+        
+        for(var i=0;i < dataLength;i++){
+            var cdata = data.data.allInfluencers[i];
+    
+            var username = ` ${cdata.username}<br>`
+            var followers=  `FollowerCount: ${cdata.stats.followerCount}<br>
+                            Average Likes Ratio: ${cdata.stats.engagement.avgLikesRatio}<br>
+                            Average Comments Ratio: ${cdata.stats.engagement.avgLikesRatio}`
+            var interests= `${cdata.stats.interests[0]}<br>
+                        ${cdata.stats.interests[1]}<br>  
+                        ${cdata.stats.interests[2]}<br>                      `
+            var picture= `${cdata.picture}`                
+            var irow = rowtemplate.replace('%d_sno%',i+1);  
+            irow = irow.replace('%d_user%',username);          
+            irow = irow.replace('%d_img%',picture);           
+            irow = irow.replace('%d_stats%',followers); 
+            irow = irow.replace('%d_interest%',interests);
+                    
+            if( i % 2 == 0){
+                irow = irow.replace('%cname%','bg-lgrey');
+            }else{
+                irow = irow.replace('%cname%','');
+            }
+            $("#datatable").append(irow);
+            
+        }
+         function reloadPage(){
+        location.reload(true);
+    }
+    });
+    </script>   
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+</body>
+</html>
